@@ -10,7 +10,7 @@ public class ConnectDB {
         Connection conn = null;
 
         try {
-            String url = "jdbc:sqlite:src/DB/Main.db";
+            String url = "jdbc:sqlite:src/main/DB/Main.db";
             conn = DriverManager.getConnection(url);
             System.out.println("Connection to SQLite has been established.");
         } catch (SQLException e) {

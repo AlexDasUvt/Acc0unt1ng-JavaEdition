@@ -11,10 +11,10 @@ import java.sql.Statement;
 
 
 public class NewDB {
-    static String directory = new File("src/DB/Main.db").getParent();
+    static String directory = new File("src/main/DB/Main.db").getParent();
 
     public static void createTable() {
-        File dbFile = new File("src/DB/Main.db");
+        File dbFile = new File("src/main/DB/Main.db");
         if (dbFile.exists()) {
             dbFile.delete();
         }

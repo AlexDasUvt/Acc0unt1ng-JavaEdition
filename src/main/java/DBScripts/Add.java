@@ -1,14 +1,14 @@
 package DBScripts;
 
+import DBObjects.RecordData;
+
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class Add {
-    public static void normal(String inputLine) {
+    public void normal(RecordData rd) {
         try (Connection conn = ConnectDB.connect(); Statement stmt = conn.createStatement()) {
-            String[] values = inputLine.split(",");
-
             String query = """
                     SELECT MAX(id)
                     FROM main
@@ -27,13 +27,13 @@ public class Add {
                     VALUES(?, ?, ?, ?, ?, ?, ?, ?)
                     """);
             pstmt.setInt(1, id); // ID
-            pstmt.setString(2, values[0]); // Date
-            pstmt.setString(3, values[1]); // Category
-            pstmt.setString(4, values[2]); // Sub-Category
-            pstmt.setString(5, values[3]); // Person-Bank
-            pstmt.setInt(6, Integer.parseInt(values[4])); // Sum
-            pstmt.setString(7, values[5]); // Currency
-            pstmt.setString(8, values[6]); // Comment
+            pstmt.setString(2, rd.date); // Date
+            pstmt.setString(3, rd.category); // Category
+            pstmt.setString(4, rd.subCategory); // Sub-Category
+            pstmt.setString(5, rd.personBank); // Person-Bank
+            pstmt.setDouble(6, rd.sum); // Sum
+            pstmt.setString(7, rd.currency); // Currency
+            pstmt.setString(8, rd.comment); // Comment
 
             pstmt.executeUpdate();
 

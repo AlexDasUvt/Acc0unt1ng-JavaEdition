@@ -1,5 +1,7 @@
 package DBScripts;
 
+import DBObjects.ResultData;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -9,7 +11,7 @@ import java.util.*;
 public class Read {
     String query;
 
-    public static List<Map<String, Object>> ReadDB(String mode) {
+    public static ResultData ReadDB(String mode) {
         List<Map<String, Object>> list = new ArrayList<>();
         String query = null;
 
@@ -50,6 +52,6 @@ public class Read {
                 Exception e) {
             System.out.println(e.getMessage());
         }
-        return list;
+        return new ResultData(list);
     }
 }

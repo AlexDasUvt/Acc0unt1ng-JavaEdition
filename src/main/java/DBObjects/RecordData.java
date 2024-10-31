@@ -31,4 +31,12 @@ public class RecordData implements Readable {
     public Boolean isReadable() {
         return !isEmpty;
     }
+
+    public boolean isValid() {
+        return (date != null && !date.isEmpty()) &&
+               (category != null && !category.isEmpty()) &&
+               (personBank != null && !personBank.isEmpty()) &&
+               (currency != null && !currency.isEmpty()) &&
+               (sum != 0);
+    }
 }

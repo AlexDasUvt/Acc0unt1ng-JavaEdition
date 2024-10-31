@@ -27,16 +27,21 @@ public class NewDB {
             }
         }
         String query = """
-                    CREATE TABLE main (
-                    id integer,
-                    date text,
-                    category text,
-                    sub_category text,
-                    person_bank text,
-                    sum real,
-                    currency text,
-                    comment text
-                )
+                        CREATE TABLE main (
+                        id integer,
+                        date text,
+                        category text,
+                        sub_category text,
+                        person_bank text,
+                        sum real,
+                        currency text,
+                        comment text
+                    );
+                        CREATE TABLE init_pb (
+                        person_bank text,
+                        sum real,
+                        currency text
+                    );
                 """;
         try (Connection conn = ConnectDB.connect(); Statement stmt = conn.createStatement()) {
             stmt.execute(query);

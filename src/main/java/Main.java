@@ -1,5 +1,5 @@
 import TerminalUI.TerminalUI;
-import WebUI.WebUI;
+import API.APIController;
 import org.springframework.boot.SpringApplication;
 
 public class Main {
@@ -14,7 +14,7 @@ public class Main {
             TerminalUI terminal = new TerminalUI();
             terminal.run();
         } else {
-            SpringApplication.run(WebUI.class, args);
+            SpringApplication.run(APIController.class, args);
         }
     }
 }

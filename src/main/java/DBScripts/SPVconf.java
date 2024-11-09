@@ -1,24 +1,34 @@
 package DBScripts;
 
+import DBObjects.InitPBData;
+import Interfaces.Debuggable;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class SPVconf {
+public class SPVconf implements Debuggable {
     protected String catincPath;
     protected String catexpPath;
     protected String subcatPath;
     protected String currPath;
+    boolean isDebugMode = false;
 
-    public SPVconf() {
+    public SPVconf(boolean isDebugMode) {
         this.catincPath = "src/main/DB/catinc.txt";
         this.catexpPath = "src/main/DB/catexp.txt";
         this.subcatPath = "src/main/DB/subcat.txt";
         this.currPath = "src/main/DB/curr.txt";
+        this.isDebugMode = isDebugMode;
     }
 
     public void WriteSPV(String pth, String newSPV, String inpMode) {
+        Debug("Inside WriteSPV. Running with: " + pth +", " + newSPV +", " + inpMode);
         FileWriter fw = null;
         PrintWriter pw = null;
         newSPV = newSPV.replace(",", "\n");
@@ -52,8 +62,9 @@ public class SPVconf {
             System.out.println(e.getMessage());
         }
     }
-    
+
     public String ReadSPV(String pth) {
+        Debug("Inside ReadSPV. Running with: " + pth);
         BufferedReader br = null;
         StringBuilder result = new StringBuilder();
         String line;
@@ -88,5 +99,33 @@ public class SPVconf {
         }
 
         return result.toString();
+    }
+
+    public String InitPB(InitPBData pbData) {
+        Debug("Inside InitPB");
+        try (Connection conn = ConnectDB.connect(); Statement stmt = conn.createStatement()) {
+            PreparedStatement pstmt = conn.prepareStatement("""
+                    INSERT INTO init_pb
+                    VALUES(?, ?, ?)
+                    """);
+            pstmt.setString(1, pbData.PersonBank);
+            pstmt.setDouble(2, pbData.Sum);
+            pstmt.setString(3, pbData.Currency);
+
+            pstmt.executeUpdate();
+            return "Success!";
+
+        } catch (SQLException e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @Override
+    public void Debug(String message) {
+        if (isDebugMode) {
+            String className = this.getClass().getSimpleName();
+            long timestamp = System.currentTimeMillis();
+            System.out.println("DEBUG: [" + timestamp + "] " + className + ": " + message);
+        }
     }
 }

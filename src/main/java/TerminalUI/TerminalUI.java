@@ -1,22 +1,36 @@
 package TerminalUI;
 
+import DBObjects.InitPBData;
 import DBObjects.RecordData;
 import DBObjects.ResultData;
 import DBScripts.*;
+import Enums.ReadCode;
+import Interfaces.Debuggable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class TerminalUI {
-    Scanner scan = new Scanner(System.in);
-    SPVconf spvconf = new SPVconf();
-    Add add = new Add();
-    Delete delete = new Delete();
+import static DBScripts.Read.getReadCode;
+
+public class TerminalUI implements Debuggable {
+    private boolean isDebugMode = false;
+    private Scanner scan = new Scanner(System.in);
+    private SPVconf spvconf;
+    private Add add;
+    private Delete delete;
+
+    public TerminalUI(boolean isDebugMode) {
+        this.isDebugMode = isDebugMode;
+        spvconf = new SPVconf(isDebugMode);
+        add = new Add(isDebugMode);
+        delete = new Delete(isDebugMode);
+    }
 
     public void run() {
         while (true) {
+            Debug("Inside menu loop");
+
             System.out.println("""
                     TERMINAL UI\
                     
@@ -31,28 +45,35 @@ public class TerminalUI {
             String input = scan.nextLine();
 
             if (input.equalsIgnoreCase("add")) {
-                System.out.println("Enter data in next format (Date,Category,Sub-Category,Person-Bank,Sum,Currency,Comment):\n");
-                String tInput = scan.nextLine();
-                String[] lst = tInput.split(",");
-                int sum = Integer.parseInt(lst[4]);
-                RecordData rd = new RecordData(lst[0], lst[1], lst[2], lst[3], (double) sum, lst[5], lst[6]);
-
+                PreAdd();
             } else if (input.equalsIgnoreCase("read")) {
+                Debug("Inside Read");
+                ReadCode rc;
                 System.out.println("""
                         Enter mode in which read:
                         
                          allm - read all records
                          m+   - read all positive records
                          m-   - read all negative records
+                         tran - read all transfer records
+                         init - read all initial records
+                         bal  - sum remaining balance on all accounts
                         
                         """);
                 String mode = scan.nextLine();
-                ResultData rs = Read.ReadDB(mode);
+                try {
+                    rc = getReadCode(mode);
+                    Debug("ReadCode: " + rc.toString());
+                } catch (Error e) {
+                    continue;
+                }
+                if (rc == null) return;
+
+                ResultData rs = Read.ReadDB(rc);
                 List<Map<String, Object>> Data = rs.getMap();
 
                 if (Data.isEmpty()) {
                     System.out.println("No data found.");
-                    break;
                 }
                 for (Map<String, Object> userMap : Data) {
                     // Print each key-value pair in the map
@@ -63,6 +84,7 @@ public class TerminalUI {
                 }
 
             } else if (input.equalsIgnoreCase("del")) {
+                Debug("Inside Delete");
                 System.out.println("Enter ID to Delete: ");
                 try {
                     int id = Integer.parseInt(scan.nextLine());
@@ -72,21 +94,81 @@ public class TerminalUI {
                 }
 
             } else if (input.equalsIgnoreCase("conf")) {
-                PreSPVconf();
+                System.out.println("Enter configuration mode\n initpb\n spv\n");
+                String mode = scan.nextLine();
+                if (mode.equalsIgnoreCase("spv")) {
+                    PreSPVconf();
+                } else if (mode.equalsIgnoreCase("inirpb")) {
+                    PreInitPB();
+                }
 
             } else if (input.equalsIgnoreCase("ndb")) {
-                NewDB.createTable();
-                System.out.println("Success!\n");
+                Debug("Inside NewDB");
+                System.out.println("WARNING! DB will be rewritten! Proceed?\n");
+                String confirmation = scan.nextLine();
+                if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+                    NewDB.createTable();
+                    System.out.println("Success!\n");
+                } else {
+                    System.out.println("Aborting!\n");
+                }
 
             } else if (input.equalsIgnoreCase("exit")) {
                 break;
+            } else {
+                System.out.println("Invalid input\n");
             }
         }
     }
 
-    private void PreSPVconf() {
-        boolean isSuccess = false;
+    private void PreAdd() {
+        Debug("Inside PreAdd");
+        System.out.println("What record to add? main/transfer?\n");
+        String input = scan.nextLine();
+        try {
+            if (input.equalsIgnoreCase("main")) {
+                Debug("Inside PreAdd - main");
+                System.out.println("Enter data in next format (Date,Category,Sub-Category,Person-Bank,Sum,Currency,Comment):\n");
+                String tInput = scan.nextLine();
 
+                String[] lst = tInput.split(",");
+                int sum = Integer.parseInt(lst[4]);
+                RecordData rd = new RecordData(lst[0], lst[1], lst[2], lst[3], null, (double) sum, lst[5], lst[6]);
+                add.normal(rd);
+
+            } else if (input.equalsIgnoreCase("transfer")) {
+                Debug("Inside PreAdd - transfer");
+                System.out.println("Enter data in next format (Date,Person-Bank Sender,Person-Bank Receiver,Sum,Currency,Comment):\n");
+                String tInput = scan.nextLine();
+
+                String[] lst = tInput.split(",");
+                int sum = Integer.parseInt(lst[3]);
+                RecordData rd = new RecordData(lst[0], null, null, lst[1], lst[2], (double) sum, lst[4], lst[5]);
+                add.transfer(rd);
+
+            } else {
+                System.out.println("Invalid input\n");
+            }
+        } catch (RuntimeException e) {
+            System.out.println("Error!: " + e.getMessage());
+        }
+    }
+
+    private void PreInitPB() {
+        Debug("Inside PreInitPB");
+        System.out.println("Enter new account in next format: Person_bank,sum,currency");
+        String line = scan.nextLine();
+        InitPBData init = new InitPBData(line);
+        try {
+            spvconf.InitPB(init);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private void PreSPVconf() {
+        Debug("Inside PreSPVconf");
         System.out.println("""
                 What field values to edit?
                  catinc - income category
@@ -102,12 +184,18 @@ public class TerminalUI {
 
         try {
             spvconf.WriteSPV(path, line, mode);
-            isSuccess = true;
+            System.out.println("Success!\n");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        if (isSuccess) {
-            System.out.println("Success!\n");
+    }
+
+    @Override
+    public void Debug(String message) {
+        if (isDebugMode) {
+            String className = this.getClass().getSimpleName();
+            long timestamp = System.currentTimeMillis();
+            System.out.println("DEBUG: [" + timestamp + "] " + className + ": " + message);
         }
     }
 }

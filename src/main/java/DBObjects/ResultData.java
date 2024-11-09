@@ -1,11 +1,11 @@
 package DBObjects;
 
-import Interfaces.Readable;
+import Interfaces.Validatable;
 
 import java.util.List;
 import java.util.Map;
 
-public class ResultData implements Readable {
+public class ResultData implements Validatable {
     private List<Map<String, Object>> map;
     private Boolean isEmpty = true;
 
@@ -15,8 +15,12 @@ public class ResultData implements Readable {
     }
 
     @Override
-    public Boolean isReadable() {
-        return !isEmpty;
+    public boolean isValid() {
+        if (!isEmpty) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public List<Map<String, Object>> getMap() {
@@ -26,7 +30,7 @@ public class ResultData implements Readable {
     public String formatResultData() {
         StringBuilder resultString = new StringBuilder();
 
-        if (!isReadable()) {
+        if (!isValid()) {
             return "ResultData is empty.";
         }
 

@@ -36,3 +36,11 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### DB ###
+src/main/DB/Main.db
+src/main/DB/*.txt
+
+### Other ###
+*.pptx
+Class-diagram.png

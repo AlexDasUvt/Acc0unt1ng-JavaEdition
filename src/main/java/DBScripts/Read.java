@@ -34,10 +34,10 @@ public class Read {
                     WHERE sum < 0
                     """);
         } else if (mode == ReadCode.tran) {
-        query = ("""
-                SELECT *
-                FROM transfer
-                """);
+            query = ("""
+                    SELECT *
+                    FROM transfer
+                    """);
         } else if (mode == ReadCode.inits) {
             query = ("""
                     SELECT *
@@ -45,34 +45,34 @@ public class Read {
                     """);
         } else if (mode == ReadCode.balance) {
             query = ("""
-                    SELECT person_bank, SUM(total_sum) AS total_balance
+                    SELECT person_bank, SUM(total_sum) AS total_balance, currency
                     FROM (
                         -- Step 1: Summing the balances from main table and init_pb table
-                        SELECT person_bank, SUM(sum) AS total_sum
+                        SELECT person_bank, SUM(sum) AS total_sum, currency
                         FROM main
-                        GROUP BY person_bank
+                        GROUP BY person_bank, currency
                     
                         UNION ALL
                     
-                        SELECT person_bank, SUM(sum) AS total_sum
+                        SELECT person_bank, SUM(sum) AS total_sum, currency
                         FROM init_pb
-                        GROUP BY person_bank
+                        GROUP BY person_bank, currency
                     
                         UNION ALL
                     
                         -- Step 2: Add incoming transfers (person_bank_to)
-                        SELECT person_bank_to AS person_bank, SUM(sum) AS total_sum
+                        SELECT person_bank_to AS person_bank, SUM(sum) AS total_sum, currency
                         FROM transfer
-                        GROUP BY person_bank_to
+                        GROUP BY person_bank_to, currency
                     
                         UNION ALL
                     
                         -- Step 3: Subtract outgoing transfers (person_bank_from)
-                        SELECT person_bank_from AS person_bank, -SUM(sum) AS total_sum
+                        SELECT person_bank_from AS person_bank, -SUM(sum) AS total_sum, currency
                         FROM transfer
-                        GROUP BY person_bank_from
+                        GROUP BY person_bank_from, currency
                     ) AS combined_sums
-                    GROUP BY person_bank;
+                    GROUP BY person_bank, currency;
                     """);
         }
 

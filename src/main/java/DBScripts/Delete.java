@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Delete implements Debuggable {
+public class Delete extends ConnectDB implements Debuggable {
     private boolean isDebugMode = false;
 
     public Delete(boolean isDebugMode) {

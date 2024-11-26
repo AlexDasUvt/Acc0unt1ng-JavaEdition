@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 
 public class Main {
     public static void main(String[] args) {
+        TerminalUI terminalUI;
         boolean isTerminal = false;
         boolean isDebugMode = false;
         for (String arg : args) {
@@ -14,8 +15,8 @@ public class Main {
             }
         }
         if (isTerminal) {
-            TerminalUI terminal = new TerminalUI(isDebugMode);
-            terminal.run();
+            terminalUI = new TerminalUI(isDebugMode);
+            terminalUI.run();
         } else {
             SpringApplication.run(APIController.class, args);
         }

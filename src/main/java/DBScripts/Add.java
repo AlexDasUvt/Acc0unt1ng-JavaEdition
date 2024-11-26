@@ -6,7 +6,7 @@ import Interfaces.Debuggable;
 
 import java.sql.*;
 
-public class Add implements Debuggable {
+public class Add extends ConnectDB implements Debuggable{
     private boolean isDebugMode = false;
 
     public Add(boolean isDebugMode) {

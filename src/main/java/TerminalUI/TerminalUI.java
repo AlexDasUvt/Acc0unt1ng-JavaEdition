@@ -5,6 +5,7 @@ import DBObjects.RecordData;
 import DBObjects.ResultData;
 import DBScripts.*;
 import Enums.ReadCode;
+import Exceptions.InvalidRC;
 import Interfaces.Debuggable;
 
 import java.util.List;
@@ -64,7 +65,8 @@ public class TerminalUI implements Debuggable {
                 try {
                     rc = getReadCode(mode);
                     Debug("ReadCode: " + rc.toString());
-                } catch (Error e) {
+                } catch (InvalidRC e) {
+                    System.out.println(e.getMessage());
                     continue;
                 }
                 if (rc == null) return;

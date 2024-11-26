@@ -2,6 +2,7 @@ package DBScripts;
 
 import DBObjects.ResultData;
 import Enums.ReadCode;
+import Exceptions.InvalidRC;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,42 +10,35 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.*;
 
-public class Read {
+public class Read extends ConnectDB {
     String query;
 
     public static ResultData ReadDB(ReadCode mode) {
         List<Map<String, Object>> list = new ArrayList<>();
-        String query = null;
-
-        if (mode == ReadCode.allm) {
-            query = ("""
+        String query = switch (mode) {
+            case allm -> ("""
                         SELECT *
                         FROM main
                     """);
-        } else if (mode == ReadCode.mplus) {
-            query = ("""
+            case mplus -> ("""
                     SELECT *
                     FROM main
                     WHERE sum > 0
                     """);
-        } else if (mode == ReadCode.mminus) {
-            query = ("""
+            case mminus -> ("""
                     SELECT *
                     FROM main
                     WHERE sum < 0
                     """);
-        } else if (mode == ReadCode.tran) {
-            query = ("""
+            case tran -> ("""
                     SELECT *
                     FROM transfer
                     """);
-        } else if (mode == ReadCode.inits) {
-            query = ("""
+            case inits -> ("""
                     SELECT *
                     FROM init_pb
                     """);
-        } else if (mode == ReadCode.balance) {
-            query = ("""
+            case balance -> ("""
                     SELECT person_bank, SUM(total_sum) AS total_balance, currency
                     FROM (
                         -- Step 1: Summing the balances from main table and init_pb table
@@ -74,7 +68,7 @@ public class Read {
                     ) AS combined_sums
                     GROUP BY person_bank, currency;
                     """);
-        }
+        };
 
         try (Connection conn = ConnectDB.connect(); Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
@@ -119,8 +113,7 @@ public class Read {
                 rc = ReadCode.tran;
                 break;
             default:
-                System.out.println("Invalid mode!");
-                throw new Error("Invalid mode!");
+                throw new InvalidRC(mode);
         }
         return rc;
     }

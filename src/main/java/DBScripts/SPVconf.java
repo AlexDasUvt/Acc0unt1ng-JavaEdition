@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SPVconf implements Debuggable {
+public class SPVconf extends ConnectDB implements Debuggable {
     protected String catincPath;
     protected String catexpPath;
     protected String subcatPath;

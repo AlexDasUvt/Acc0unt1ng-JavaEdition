@@ -8,6 +8,7 @@ import DBScripts.Add;
 import DBScripts.Read;
 import Enums.ReadCode;
 import DBScripts.SPVconf;
+import Exceptions.InvalidRC;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
@@ -143,8 +144,8 @@ public class APIController { // TODO Implement Debuggable into APIController
         ReadCode rc;
         try {
             rc = getReadCode(readCommand.getCommand());
-        } catch (Exception e) {
-            return "Error: Invalid command!";
+        } catch (InvalidRC e) {
+            return "Error: " + e.getMessage();
         }
 
         ResultData rs = Read.ReadDB(rc);

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class NewDB {
+public class NewDB extends ConnectDB {
     static String directory = new File("src/main/DB/Main.db").getParent();
 
     public static void createTable() {

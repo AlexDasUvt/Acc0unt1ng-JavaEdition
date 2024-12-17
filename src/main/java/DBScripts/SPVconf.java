@@ -11,33 +11,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SPVconf extends ConnectDB implements Debuggable {
-    protected String catincPath;
-    protected String catexpPath;
+    protected String catPath;
     protected String subcatPath;
     protected String currPath;
     boolean isDebugMode = false;
 
     public SPVconf(boolean isDebugMode) {
-        this.catincPath = "src/main/DB/catinc.txt";
-        this.catexpPath = "src/main/DB/catexp.txt";
+        this.catPath = "src/main/DB/cat.txt";
         this.subcatPath = "src/main/DB/subcat.txt";
         this.currPath = "src/main/DB/curr.txt";
         this.isDebugMode = isDebugMode;
     }
 
     public void WriteSPV(String pth, String newSPV, String inpMode) {
-        Debug("Inside WriteSPV. Running with: " + pth +", " + newSPV +", " + inpMode);
+        Debug("Inside WriteSPV. Running with: " + pth + ", " + newSPV + ", " + inpMode);
         FileWriter fw = null;
         PrintWriter pw = null;
         newSPV = newSPV.replace(",", "\n");
 
         try {
-            if (pth.equalsIgnoreCase("catinc")) {
-                fw = new FileWriter(catincPath, true);
-            } else if (pth.equalsIgnoreCase("catexp")) {
-                fw = new FileWriter(catexpPath, true);
+            if (pth.equalsIgnoreCase("cat")) {
+                fw = new FileWriter(catPath, true);
             } else if (pth.equalsIgnoreCase("subcat")) {
                 fw = new FileWriter(subcatPath, true);
             } else if (pth.equalsIgnoreCase("curr")) {
@@ -70,10 +68,8 @@ public class SPVconf extends ConnectDB implements Debuggable {
         String line;
 
         try {
-            if (pth.equalsIgnoreCase("catinc")) {
-                br = new BufferedReader(new FileReader(catincPath));
-            } else if (pth.equalsIgnoreCase("catexp")) {
-                br = new BufferedReader(new FileReader(catexpPath));
+            if (pth.equalsIgnoreCase("cat")) {
+                br = new BufferedReader(new FileReader(catPath));
             } else if (pth.equalsIgnoreCase("subcat")) {
                 br = new BufferedReader(new FileReader(subcatPath));
             } else if (pth.equalsIgnoreCase("curr")) {
@@ -99,6 +95,16 @@ public class SPVconf extends ConnectDB implements Debuggable {
         }
 
         return result.toString();
+    }
+
+    public List<String> readSPVList(String pth){
+        String normalText = ReadSPV(pth);
+        List<String> result = new ArrayList<String>();
+
+        for (String line : normalText.split("\n")) {
+            result.add(line);
+        }
+        return result;
     }
 
     public String InitPB(InitPBData pbData) {

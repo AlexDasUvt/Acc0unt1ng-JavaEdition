@@ -1,9 +1,15 @@
 package GUI;
 
 import DBObjects.RecordData;
+import DBObjects.ResultData;
+import DBScripts.Read;
+import DBScripts.SPVconf;
+import Enums.ReadCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,25 +20,33 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class GUIController extends Application {
+    private ObservableList<String> catList = FXCollections.observableList(new ArrayList<>());
+    private ObservableList<String> subcatList = FXCollections.observableList(new ArrayList<>());
+    private ObservableList<String> PBList = FXCollections.observableList(new ArrayList<>());
+    private ObservableList<String> currList = FXCollections.observableList(new ArrayList<>());
+
     @FXML
-    private ListView<?> MainCatList;
+    private ComboBox<String> MainCatCombo;
 
     @FXML
     private TextField MainCommentText;
 
     @FXML
-    private ListView<?> MainCurrList;
+    private ComboBox<String> MainCurrCombo;
 
     @FXML
     private DatePicker MainDate;
 
     @FXML
-    private ListView<?> MainPBList;
+    private ComboBox<String> MainPBCombo;
 
     @FXML
-    private ListView<?> MainSubcatList;
+    private ComboBox<String> MainSubcatCombo;
 
     @FXML
     private Button MainSubmitButton;
@@ -57,12 +71,59 @@ public class GUIController extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("src/main/resources/FXML/MainPage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/MainPage.fxml"));
         Parent root = loader.load();
+
         Scene scene = new Scene(root, 800, 500);
         primaryStage.setTitle("Acc0unt1ng-JavaEdition");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    @FXML
+    public void initialize() {
+        // Initialize and populate the ListViews after FXML fields are injected
+        populateList("cat");
+        MainCatCombo.setItems(catList);
+
+        populateList("subcat");
+        MainSubcatCombo.setItems(subcatList);
+
+        populateList("PB");
+        MainPBCombo.setItems(PBList);
+
+        populateList("curr");
+        MainCurrCombo.setItems(currList);
+    }
+
+    private void populateList(String mode) {
+        SPVconf spVconf = new SPVconf(false);
+        switch (mode) {
+            case "cat":
+                List<String> cats = (List<String>) spVconf.readSPVList(mode);
+                catList = FXCollections.observableArrayList(cats); // Convert to ObservableList
+                break;
+            case "subcat":
+                List<String> subcats = (List<String>) spVconf.readSPVList(mode);
+                subcatList = FXCollections.observableArrayList(subcats); // Convert to ObservableList
+                break;
+            case "PB":
+                // TODO Fix combo population.
+                ResultData rd = Read.ReadDB(ReadCode.inits);
+                List<Map<String, Object>> data = rd.getMap();
+                List<String> PB = new ArrayList<>();
+                for (Map<String, Object> userMap : data) {
+                    for (Map.Entry<String, Object> entry : userMap.entrySet()) {
+                        PB.add(entry.getKey());
+                    }
+                }
+                PBList = FXCollections.observableArrayList(PB); // Convert to ObservableList
+                break;
+            case "curr":
+                List<String> currencies = (List<String>) spVconf.readSPVList(mode);
+                currList = FXCollections.observableArrayList(currencies); // Convert to ObservableList
+                break;
+        }
     }
 
     @FXML
@@ -82,15 +143,20 @@ public class GUIController extends Application {
 
     @FXML
     void MenuTransferButton(MouseEvent event) {
-
+        // FXMLLoader loader = new FXMLLoader(getClass().getResource("src/main/resources/FXML/TransferPage.fxml"));
+        // Parent root = loader.load();
+        // Scene scene = new Scene(root, 800, 500);
+        // primaryStage.setTitle("Acc0unt1ng-JavaEdition");
+        // primaryStage.setScene(scene);
+        // primaryStage.show();
     }
 
     @FXML
     void SubmitMainRecord(MouseEvent event) {
         String date = MainDate.getValue().toString();
-        String cat = MainCatList.getSelectionModel().getSelectedItem().toString();
-        String subcat = MainPBList.getSelectionModel().getSelectedItem().toString();
-        String PB = MainPBList.getSelectionModel().getSelectedItem().toString();
+        String cat = MainCatCombo.getSelectionModel().getSelectedItem();
+        String subcat = MainPBCombo.getSelectionModel().getSelectedItem();
+        String PB = MainPBCombo.getSelectionModel().getSelectedItem();
         double sum = 0;
         try {
             sum = Double.parseDouble(MainSumText.getText());
@@ -99,7 +165,7 @@ public class GUIController extends Application {
             MainInfoLabel.setTextFill(Color.RED);
             MainInfoLabel.setVisible(true);
         }
-        String curr = MainCurrList.getSelectionModel().getSelectedItem().toString();
+        String curr = MainCurrCombo.getSelectionModel().getSelectedItem();
         String comment = MainCommentText.getText();
 
         RecordData transaction = new RecordData(date, cat, subcat, PB, null, sum, curr, comment);
@@ -114,7 +180,7 @@ public class GUIController extends Application {
             HTTPSender sender = new HTTPSender();
             JSON = getJSON(transaction);
 
-            int result = 0;
+            int result;
             try {
                 result = sender.SendHTTP("main", JSON);
             } catch (MalformedURLException e) {

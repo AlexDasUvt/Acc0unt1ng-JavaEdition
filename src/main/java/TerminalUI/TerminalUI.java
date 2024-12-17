@@ -69,7 +69,6 @@ public class TerminalUI implements Debuggable {
                     System.out.println(e.getMessage());
                     continue;
                 }
-                if (rc == null) return;
 
                 ResultData rs = Read.ReadDB(rc);
                 List<Map<String, Object>> Data = rs.getMap();
@@ -173,8 +172,7 @@ public class TerminalUI implements Debuggable {
         Debug("Inside PreSPVconf");
         System.out.println("""
                 What field values to edit?
-                 catinc - income category
-                 catexp - expense category
+                 cat - category
                  subcat - sub-category
                  curr - currency""");
         String path = scan.nextLine();

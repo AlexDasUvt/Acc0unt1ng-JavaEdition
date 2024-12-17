@@ -10,10 +10,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class HTTPSender {
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(2);
-
     public int SendHTTP(String route, String JSON) throws MalformedURLException {
-        // TODO Make sure thread is closed after end
+        // TODO Add threads (if needed)
         URL url = switch (route) {
             case "main" -> new URL("http://127.0.0.1:8080/main");
             case "transfer" -> new URL("http://127.0.0.1:8080/transfer");

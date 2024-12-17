@@ -2,9 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -120,12 +120,12 @@
                      </font>
                   </Label>
                   <DatePicker fx:id="MainDate" GridPane.rowIndex="1" />
-                  <ListView fx:id="MainCatList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="MainSumText" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                   <TextField fx:id="MainCommentText" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                  <ListView fx:id="MainSubcatList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <ListView fx:id="MainPBList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <ListView fx:id="MainCurrList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="MainCatCombo" prefWidth="150.0" promptText="Select category" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="MainSubcatCombo" prefWidth="150.0" promptText="Select sub-category" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="MainPBCombo" prefWidth="150.0" promptText="Select Person-Bank" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="MainCurrCombo" prefWidth="150.0" promptText="Select currency" GridPane.columnIndex="5" GridPane.rowIndex="1" />
                </children>
                <VBox.margin>
                   <Insets left="10.0" right="10.0" top="5.0" />

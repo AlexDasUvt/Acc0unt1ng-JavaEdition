@@ -27,22 +27,18 @@ public class Main {
             }
         }
 
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-
         if (isApiOnly) {
             SpringApplication.run(APIController.class, args);
         } else if (isTerminal) {
             TerminalUI terminalUI = new TerminalUI(isDebugMode);
             terminalUI.run();
         } else {
-            executor.submit(() -> {
-                SpringApplication.run(APIController.class, args);
-            });
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.submit(() -> SpringApplication.run(APIController.class, args));
 
-            executor.submit(() -> {
-                Application.launch(GUIController.class, args);
-            });
+            Application.launch(GUIController.class, args);
+
+            executor.shutdown();
         }
-        executor.shutdown();
     }
 }

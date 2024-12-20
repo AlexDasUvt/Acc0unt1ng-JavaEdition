@@ -1,4 +1,4 @@
-package GUI;
+package API;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -6,15 +6,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class HTTPSender {
     public int SendHTTP(String route, String JSON) throws MalformedURLException {
         // TODO Add threads (if needed)
         URL url = switch (route) {
-            case "main" -> new URL("http://127.0.0.1:8080/main");
-            case "transfer" -> new URL("http://127.0.0.1:8080/transfer");
+            case "main" -> new URL("http://127.0.0.1:8080/add/main");
+            case "transfer" -> new URL("http://127.0.0.1:8080/add/transfer");
             case "read" -> new URL("http://127.0.0.1:8080/read");
             default -> null;
         };

@@ -55,7 +55,7 @@ public class APIController { // TODO Implement Debuggable into APIController
                 
                      Key     |                       Value
                 -------------|-------------------------------------------------------
-                date         | *Date value*
+                date         | *Date value YYYY-MM-DD*
                 category     | *Category value*
                 subCategory  | *Sub-Category value, if exist*
                 personBank   | *Person-Bank pair*

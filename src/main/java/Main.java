@@ -1,6 +1,6 @@
+import GUI.StartController;
 import TerminalUI.TerminalUI;
 import API.APIController;
-import GUI.GUIController;
 import javafx.application.Application;
 import org.springframework.boot.SpringApplication;
 
@@ -36,7 +36,7 @@ public class Main {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.submit(() -> SpringApplication.run(APIController.class, args));
 
-            Application.launch(GUIController.class, args);
+            Application.launch(StartController.class, args);
 
             executor.shutdown();
         }

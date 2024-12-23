@@ -167,15 +167,16 @@ public class MainPageController {
         } else {
 
             String JSON;
-            HTTPSender sender = new HTTPSender();
-            JSON = getJSON(transaction);
-
-            int result;
+            HTTPSender sender = null;
             try {
-                result = sender.SendHTTP("main", JSON);
+                sender = new HTTPSender();
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
+            JSON = getJSON(transaction);
+
+            int result;
+            result = sender.AddRecordHTTP("main", JSON);
             if (result == 200) {
                 MainInfoLabel.setText("Record write successful!");
                 MainInfoLabel.setTextFill(Color.GREEN);

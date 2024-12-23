@@ -90,7 +90,7 @@ public class APIController { // TODO Implement Debuggable into APIController
                 
                      Key     |                       Value
                 -------------|-------------------------------------------------------
-                date         | *Date value*
+                date         | *Date value YYYY-MM-DD*
                 personBank   | *Person-Bank pair of sender*
                 personBankTo | *Person-Bank pair of receiver*
                 sum          | *Sum value. Positive for income, negative for expense*
@@ -130,6 +130,7 @@ public class APIController { // TODO Implement Debuggable into APIController
                  allm   - For all records in the database.
                  m+     - For all positive records in the database.
                  m-     - For all negative records in the database.
+                 tran   - For all transfer records.
                  init   - For all initial records in the database.
                  bal    - Total balance on all accounts.
                 """;
@@ -150,6 +151,17 @@ public class APIController { // TODO Implement Debuggable into APIController
 
         ResultData rs = Read.ReadDB(rc);
         return rs.formatResultData();
+    }
+
+    @PostMapping("/read/raw")
+    public ResultData postReadRaw(@RequestBody ReadCommand readCommand) {
+        if (readCommand.isValid()) {
+            ReadCode rc = getReadCode(readCommand.getCommand());
+            ResultData rs = Read.ReadDB(rc);
+            return rs;
+        }
+        System.out.println("Invalid code Exception!");
+        return null;
     }
 
     @GetMapping("/conf/spv/initpb")

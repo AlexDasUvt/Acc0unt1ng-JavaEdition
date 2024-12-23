@@ -1,8 +1,9 @@
 package GUI;
 
+import API.HTTPSender;
 import DBObjects.ResultData;
-import DBScripts.Read;
-import Enums.ReadCode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,8 @@ import javafx.stage.Stage;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -117,8 +120,16 @@ public class HistoryPageController {
     }
 
     private void loadHistoryData(String code) {
+        HTTPSender httpSender;
+        try {
+            httpSender = new HTTPSender();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
         if (Objects.equals(code, "main")) {
-            ResultData resultData = Read.ReadDB(ReadCode.allm);
+            String json = toJSON("allm");
+            ResultData resultData;
+            resultData = httpSender.ReadDBHTTP(json);
 
             if (resultData != null && resultData.isValid()) {
                 List<Map<String, Object>> resultList = resultData.getMap();
@@ -129,9 +140,19 @@ public class HistoryPageController {
                     String sum = row.get("sum").toString();
                     String currency = row.get("currency").toString();
                     String category = row.get("category").toString();
-                    String subcategory = row.get("subcategory").toString();
-                    String comment = row.get("comment").toString();
-                    String pb = row.get("pb").toString();
+                    String subcategory;
+                    if (row.get("sub_category") != null) {
+                        subcategory = row.get("sub_category").toString();
+                    } else {
+                        subcategory = "";
+                    }
+                    String comment;
+                    if (row.get("comment") != null) {
+                        comment = row.get("comment").toString();
+                    } else {
+                        comment = "";
+                    }
+                    String pb = row.get("person_bank").toString();
 
                     historyMainData.add(new HistoryMainData(id, date, sum, currency, category, subcategory, comment, pb));
                 }
@@ -139,7 +160,9 @@ public class HistoryPageController {
                 MainTable.setItems(historyMainData);
             }
         } else if (Objects.equals(code, "transfer")) {
-            ResultData resultData = Read.ReadDB(ReadCode.tran);
+            String json = toJSON("tran");
+            ResultData resultData;
+            resultData = httpSender.ReadDBHTTP(json);
 
             if (resultData != null && resultData.isValid()) {
                 List<Map<String, Object>> resultList = resultData.getMap();
@@ -151,7 +174,12 @@ public class HistoryPageController {
                     String currency = row.get("currency").toString();
                     String pbTo = row.get("person_bank_to").toString();
                     String pbFrom = row.get("person_bank_from").toString();
-                    String comment = row.get("comment").toString();
+                    String comment;
+                    if (row.get("comment") != null) {
+                        comment = row.get("comment").toString();
+                    } else {
+                        comment = "";
+                    }
 
                     historyTransferData.add(new HistoryTransferData(id, date, sum, currency, pbTo, pbFrom, comment));
                 }
@@ -159,6 +187,23 @@ public class HistoryPageController {
                 TransferTable.setItems(historyTransferData);
             }
         }
+    }
+
+    private String toJSON(String path) {
+        String key = "command";
+
+        Map<String, String> map = new HashMap<>();
+        map.put(key, path);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json;
+        try {
+            json = objectMapper.writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return json;
     }
 
     @FXML

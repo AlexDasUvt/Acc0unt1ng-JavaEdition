@@ -140,15 +140,16 @@ public class TransferPageController {
         } else {
 
             String JSON;
-            HTTPSender sender = new HTTPSender();
-            JSON = getJSON(transaction);
-
-            int result;
+            HTTPSender sender = null;
             try {
-                result = sender.SendHTTP("transfer", JSON);
+                sender = new HTTPSender();
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
+            JSON = getJSON(transaction);
+
+            int result;
+            result = sender.AddRecordHTTP("transfer", JSON);
             if (result == 200) {
                 TransferInfoLabel.setText("Record write successful!");
                 TransferInfoLabel.setTextFill(Color.GREEN);

@@ -129,7 +129,7 @@ public class TerminalUI implements Debuggable {
         try {
             if (input.equalsIgnoreCase("main")) {
                 Debug("Inside PreAdd - main");
-                System.out.println("Enter data in next format (Date,Category,Sub-Category,Person-Bank,Sum,Currency,Comment):\n");
+                System.out.println("Enter data in next format (Date *YYYY-MM-DD*,Category,Sub-Category,Person-Bank,Sum,Currency,Comment):\n");
                 String tInput = scan.nextLine();
 
                 String[] lst = tInput.split(",");

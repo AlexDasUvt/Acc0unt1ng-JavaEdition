@@ -1,17 +1,30 @@
 package DBObjects;
 
 import Interfaces.Validatable;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResultData implements Validatable {
     private List<Map<String, Object>> map;
     private Boolean isEmpty = true;
 
+    public ResultData() {
+        this.map = new ArrayList<>();
+        this.isEmpty = true;
+    }
+
     public ResultData(List<Map<String, Object>> map) {
         this.map = map;
         isEmpty = false;
+    }
+
+    public void setMap(List<Map<String, Object>> map) {
+        this.map = map;
+        this.isEmpty = (map == null || map.isEmpty());
     }
 
     @Override

@@ -65,30 +65,42 @@
                   <Insets left="-3.0" />
                </VBox.margin>
             </Rectangle>
-            <Label text="    Main records" />
+            <Label text="    Main records">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TableView fx:id="MainTable" maxWidth="-Infinity" prefHeight="218.0" prefWidth="796.0">
               <columns>
-                <TableColumn fx:id="MainIdCol" prefWidth="39.19998240470886" text="id" />
-                <TableColumn fx:id="MainDateCol" prefWidth="107.99999618530273" text="Date" />
-                  <TableColumn fx:id="MainCatCol" prefWidth="113.60005187988281" text="Category" />
-                  <TableColumn fx:id="MainSubcatCol" prefWidth="104.0" text="Sub-category" />
-                  <TableColumn fx:id="MainPBCol" prefWidth="127.20001220703125" text="Person-Bank" />
-                  <TableColumn fx:id="MainSumCol" minWidth="0.0" prefWidth="88.7999267578125" text="Sum" />
-                  <TableColumn fx:id="MainCurrCol" prefWidth="73.60003662109375" text="Currency" />
-                  <TableColumn fx:id="MainCommentCol" prefWidth="148.0" text="Comment" />
+                <TableColumn fx:id="MainIdCol" prefWidth="40.0" resizable="false" text="id" />
+                <TableColumn fx:id="MainDateCol" prefWidth="90.0" resizable="false" text="Date" />
+                  <TableColumn fx:id="MainCatCol" prefWidth="110.0" resizable="false" text="Category" />
+                  <TableColumn fx:id="MainSubcatCol" prefWidth="110.0" resizable="false" text="Sub-category" />
+                  <TableColumn fx:id="MainPBCol" prefWidth="128.0" resizable="false" text="Person-Bank" />
+                  <TableColumn fx:id="MainSumCol" minWidth="0.0" prefWidth="88.0" resizable="false" text="Sum" />
+                  <TableColumn fx:id="MainCurrCol" prefWidth="74.0" resizable="false" text="Currency" />
+                  <TableColumn fx:id="MainCommentCol" prefWidth="152.0" resizable="false" sortable="false" text="Comment" />
               </columns>
+               <VBox.margin>
+                  <Insets right="4.0" />
+               </VBox.margin>
             </TableView>
-            <Label text="    Transfer records" />
+            <Label text="    Transfer records">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TableView fx:id="TransferTable" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="210.0" prefWidth="796.0">
               <columns>
-                <TableColumn fx:id="TransferIdCol" prefWidth="43.19998240470886" text="id" />
-                  <TableColumn fx:id="TransferDateCol" prefWidth="128.8000144958496" text="Date" />
-                <TableColumn fx:id="TransferSenderCol" prefWidth="170.0" text="Sender" />
-                  <TableColumn fx:id="TransferReceiverCol" prefWidth="170.0" text="Receiver" />
-                  <TableColumn fx:id="TransferSumCol" text="Sum" />
-                  <TableColumn fx:id="TransferCurrCol" prefWidth="78.4000244140625" text="Currency" />
-                  <TableColumn fx:id="TransferCommentCol" prefWidth="128.0" text="Comment" />
+                <TableColumn fx:id="TransferIdCol" prefWidth="42.0" resizable="false" text="id" />
+                  <TableColumn fx:id="TransferDateCol" prefWidth="120.0" resizable="false" text="Date" />
+                <TableColumn fx:id="TransferSenderCol" prefWidth="172.0" resizable="false" text="Sender" />
+                  <TableColumn fx:id="TransferReceiverCol" prefWidth="172.0" resizable="false" text="Receiver" />
+                  <TableColumn fx:id="TransferSumCol" resizable="false" text="Sum" />
+                  <TableColumn fx:id="TransferCurrCol" resizable="false" text="Currency" />
+                  <TableColumn fx:id="TransferCommentCol" prefWidth="126.0" resizable="false" sortable="false" text="Comment" />
               </columns>
+               <VBox.margin>
+                  <Insets right="4.0" />
+               </VBox.margin>
             </TableView>
          </children>
       </VBox>

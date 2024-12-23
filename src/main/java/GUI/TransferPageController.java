@@ -164,8 +164,12 @@ public class TransferPageController {
     }
 
     @FXML
-    void MenuBalanceButton(MouseEvent event) {
-
+    void MenuBalanceButton(MouseEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("/FXML/BalancePage.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML

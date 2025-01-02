@@ -98,14 +98,23 @@ public class TransferPageController {
     @FXML
     void SubmitTransferRecord(MouseEvent event) {
         if (TransferDate.getValue() == null) {
+            TransferInfoLabel.setText("Invalid Date!");
+            TransferInfoLabel.setTextFill(Color.RED);
+            TransferInfoLabel.setVisible(true);
             return;
         }
         String date = TransferDate.getValue().toString();
         if (TransferPBTCombo.getValue() == null) {
+            TransferInfoLabel.setText("Invalid Receiver!");
+            TransferInfoLabel.setTextFill(Color.RED);
+            TransferInfoLabel.setVisible(true);
             return;
         }
         String PBTo = TransferPBTCombo.getSelectionModel().getSelectedItem();
         if (TransferPBFCombo.getValue() == null) {
+            TransferInfoLabel.setText("Invalid Sender!");
+            TransferInfoLabel.setTextFill(Color.RED);
+            TransferInfoLabel.setVisible(true);
             return;
         }
         String PBFrom = TransferPBFCombo.getSelectionModel().getSelectedItem();
@@ -126,6 +135,9 @@ public class TransferPageController {
             return;
         }
         if (TransferCurrCombo.getValue() == null) {
+            TransferInfoLabel.setText("Invalid Currency!");
+            TransferInfoLabel.setTextFill(Color.RED);
+            TransferInfoLabel.setVisible(true);
             return;
         }
         String curr = TransferCurrCombo.getSelectionModel().getSelectedItem();

@@ -128,21 +128,31 @@ public class MainPageController {
     @FXML
     void SubmitMainRecord(MouseEvent event) {
         if (MainDate.getValue() == null) {
+            MainInfoLabel.setText("Missing Date!");
+            MainInfoLabel.setTextFill(Color.RED);
+            MainInfoLabel.setVisible(true);
             return;
         }
         String date = MainDate.getValue().toString();
 
         if (MainCatCombo.getValue() == null) {
+            MainInfoLabel.setText("Missing Category!");
+            MainInfoLabel.setTextFill(Color.RED);
+            MainInfoLabel.setVisible(true);
             return;
         }
         String cat = MainCatCombo.getSelectionModel().getSelectedItem();
 
+        String subcat;
         if (MainSubcatCombo.getValue() == null) {
-            return;
+            subcat = " ";
+        } else {
+            subcat = MainSubcatCombo.getSelectionModel().getSelectedItem();
         }
-        String subcat = MainSubcatCombo.getSelectionModel().getSelectedItem();
-
         if (MainPBCombo.getValue() == null) {
+            MainInfoLabel.setText("Missing Person-bank!");
+            MainInfoLabel.setTextFill(Color.RED);
+            MainInfoLabel.setVisible(true);
             return;
         }
         String PB = MainPBCombo.getSelectionModel().getSelectedItem();
@@ -156,6 +166,9 @@ public class MainPageController {
             return;
         }
         if (MainCurrCombo.getValue() == null) {
+            MainInfoLabel.setText("Missing Currency!");
+            MainInfoLabel.setTextFill(Color.RED);
+            MainInfoLabel.setVisible(true);
             return;
         }
         String curr = MainCurrCombo.getSelectionModel().getSelectedItem();

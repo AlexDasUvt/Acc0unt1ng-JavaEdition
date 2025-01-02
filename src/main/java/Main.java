@@ -1,4 +1,5 @@
 import GUI.StartController;
+import Settings.GlobalSettings;
 import TerminalUI.TerminalUI;
 import API.APIController;
 import javafx.application.Application;
@@ -9,28 +10,24 @@ import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args) {
-        boolean isTerminal = false;
-        boolean isApiOnly = false;
-        boolean isDebugMode = false;
-
-        for (String arg : args) {
+                for (String arg : args) {
             switch (arg) {
                 case "-terminalUI":
-                    isTerminal = true;
+                    GlobalSettings.EnableTerminalMode();
                     break;
                 case "-apiOnly":
-                    isApiOnly = true;
+                    GlobalSettings.EnableApiOnlyMode();
                     break;
                 case "-debug":
-                    isDebugMode = true;
+                    GlobalSettings.EnableDebugMode();
                     break;
             }
         }
 
-        if (isApiOnly) {
+        if (GlobalSettings.isApiOnly) {
             SpringApplication.run(APIController.class, args);
-        } else if (isTerminal) {
-            TerminalUI terminalUI = new TerminalUI(isDebugMode);
+        } else if (GlobalSettings.isTerminal) {
+            TerminalUI terminalUI = new TerminalUI();
             terminalUI.run();
         } else {
             ExecutorService executor = Executors.newSingleThreadExecutor();

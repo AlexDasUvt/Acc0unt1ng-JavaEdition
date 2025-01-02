@@ -7,6 +7,7 @@ import DBScripts.*;
 import Enums.ReadCode;
 import Exceptions.InvalidRC;
 import Interfaces.Debuggable;
+import Settings.GlobalSettings;
 
 import java.util.List;
 import java.util.Map;
@@ -15,16 +16,16 @@ import java.util.Scanner;
 import static DBScripts.Read.getReadCode;
 
 public class TerminalUI implements Debuggable {
-    private boolean isDebugMode = false;
+    private boolean isDebugMode;
     private Scanner scan = new Scanner(System.in);
     private SPVconf spvconf;
     private Add add;
     private Delete delete;
 
-    public TerminalUI(boolean isDebugMode) {
-        this.isDebugMode = isDebugMode;
-        spvconf = new SPVconf(isDebugMode);
-        add = new Add(isDebugMode);
+    public TerminalUI() {
+        this.isDebugMode = GlobalSettings.isDebugMode;
+        spvconf = new SPVconf();
+        add = new Add();
         delete = new Delete(isDebugMode);
     }
 

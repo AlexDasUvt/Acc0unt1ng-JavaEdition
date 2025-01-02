@@ -68,6 +68,11 @@ public class Read extends ConnectDB {
                     ) AS combined_sums
                     GROUP BY person_bank, currency;
                     """);
+            case allacc -> ("""
+                    SELECT DISTINCT person_bank
+                    FROM init_pb
+                    ORDER BY person_bank
+                    """);
         };
 
         try (Connection conn = ConnectDB.connect(); Statement stmt = conn.createStatement()) {
@@ -111,6 +116,9 @@ public class Read extends ConnectDB {
                 break;
             case "tran":
                 rc = ReadCode.tran;
+                break;
+            case "allacc":
+                rc = ReadCode.allacc;
                 break;
             default:
                 throw new InvalidRC(mode);

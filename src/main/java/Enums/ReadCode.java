@@ -6,5 +6,6 @@ public enum ReadCode {
     mminus,
     tran,
     balance,
-    inits
+    inits,
+    allacc
 }

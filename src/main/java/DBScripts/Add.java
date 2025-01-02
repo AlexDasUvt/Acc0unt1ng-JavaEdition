@@ -3,14 +3,12 @@ package DBScripts;
 import DBObjects.RecordData;
 import Exceptions.PBNotExist;
 import Interfaces.Debuggable;
+import Settings.GlobalSettings;
 
 import java.sql.*;
 
-public class Add extends ConnectDB implements Debuggable{
-    private boolean isDebugMode = false;
-
-    public Add(boolean isDebugMode) {
-        this.isDebugMode = isDebugMode;
+public class Add extends ConnectDB implements Debuggable {
+    public Add() {
     }
 
     public void normal(RecordData rd) {
@@ -108,19 +106,25 @@ public class Add extends ConnectDB implements Debuggable{
             } else {
                 id++;
             }
-            Debug("New ID: " + id);
 
             pstmt = conn.prepareStatement("""
                     INSERT INTO transfer
                     VALUES(?, ?, ?, ?, ?, ?, ?)
                     """);
             pstmt.setInt(1, id); // ID
+            Debug("New ID: " + id);
             pstmt.setString(2, rd.date); // Date
+            Debug("New Date: " + rd.date);
             pstmt.setString(3, rd.personBank); // Person-Bank From
+            Debug("New Sender: " + rd.personBank);
             pstmt.setString(4, rd.personBankTo); // Person-Bank To
+            Debug("New Receiver: " + rd.personBankTo);
             pstmt.setDouble(5, rd.sum); // Sum
+            Debug("New Sum: " + rd.sum);
             pstmt.setString(6, rd.currency); // Currency
+            Debug("New Currency: " + rd.currency);
             pstmt.setString(7, rd.comment); // Comment
+            Debug("New Comment: " + rd.comment);
 
             pstmt.executeUpdate();
 
@@ -132,7 +136,7 @@ public class Add extends ConnectDB implements Debuggable{
 
     @Override
     public void Debug(String message) {
-        if (isDebugMode) {
+        if (GlobalSettings.isDebugMode) {
             String className = this.getClass().getSimpleName();
             long timestamp = System.currentTimeMillis();
             System.out.println("DEBUG: [" + timestamp + "] " + className + ": " + message);

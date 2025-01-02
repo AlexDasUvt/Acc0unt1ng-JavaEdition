@@ -1,16 +1,17 @@
 package DBScripts;
 
 import Interfaces.Debuggable;
+import Settings.GlobalSettings;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Delete extends ConnectDB implements Debuggable {
-    private boolean isDebugMode = false;
+    private boolean isDebugMode;
 
     public Delete(boolean isDebugMode) {
-        this.isDebugMode = isDebugMode;
+        this.isDebugMode = GlobalSettings.isDebugMode;
     }
 
     public void DeleteOne(int ID) {

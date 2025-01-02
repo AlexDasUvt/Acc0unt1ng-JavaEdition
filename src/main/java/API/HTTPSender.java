@@ -1,6 +1,7 @@
 package API;
 
 import DBObjects.ResultData;
+import Interfaces.Debuggable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
@@ -12,7 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class HTTPSender {
+public class HTTPSender implements Debuggable {
     URL mainURL;
     URL tranURL;
     URL readURL;
@@ -53,6 +54,7 @@ public class HTTPSender {
 
     public ResultData ReadDBHTTP(String JSON) {
         try {
+            Debug("JSON:\n " + JSON);
             HttpURLConnection connection = (HttpURLConnection) readURL.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
@@ -66,6 +68,7 @@ public class HTTPSender {
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
+                Debug("Response code: " + responseCode);
                 // Read the response from the input stream
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
                     StringBuilder response = new StringBuilder();
@@ -91,4 +94,12 @@ public class HTTPSender {
         }
     }
 
+    @Override
+    public void Debug(String message) {
+        if (isDebugMode) {
+            String className = this.getClass().getSimpleName();
+            long timestamp = System.currentTimeMillis();
+            System.out.println("DEBUG: [" + timestamp + "] " + className + ": " + message);
+        }
+    }
 }

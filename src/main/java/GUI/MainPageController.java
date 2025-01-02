@@ -92,7 +92,7 @@ public class MainPageController {
     }
 
     private void populateList(String mode) {
-        SPVconf spVconf = new SPVconf(false);
+        SPVconf spVconf = new SPVconf();
         switch (mode) {
             case "cat":
                 List<String> cat = spVconf.readSPVList(mode);
@@ -103,7 +103,7 @@ public class MainPageController {
                 subcatList = FXCollections.observableArrayList(subcat); // Convert to ObservableList
                 break;
             case "PB":
-                ResultData rd = Read.ReadDB(ReadCode.inits);
+                ResultData rd = Read.ReadDB(ReadCode.allacc);
                 List<Map<String, Object>> data = rd.getMap();
                 List<String> PB = new ArrayList<>();
                 for (Map<String, Object> userMap : data) {
@@ -131,15 +131,18 @@ public class MainPageController {
             return;
         }
         String date = MainDate.getValue().toString();
+
         if (MainCatCombo.getValue() == null) {
             return;
         }
-        String cat = MainSubcatCombo.getSelectionModel().getSelectedItem();
-        if (MainDate.getValue() == null) {
+        String cat = MainCatCombo.getSelectionModel().getSelectedItem();
+
+        if (MainSubcatCombo.getValue() == null) {
             return;
         }
-        String subcat = MainPBCombo.getSelectionModel().getSelectedItem();
-        if (MainDate.getValue() == null) {
+        String subcat = MainSubcatCombo.getSelectionModel().getSelectedItem();
+
+        if (MainPBCombo.getValue() == null) {
             return;
         }
         String PB = MainPBCombo.getSelectionModel().getSelectedItem();

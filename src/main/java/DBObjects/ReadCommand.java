@@ -17,6 +17,7 @@ public class ReadCommand implements Validatable {
     public boolean isValid() {
         return command != null && (command.equals("allm") || command.equals("m+") ||
                                    command.equals("m-") || command.equals("init") ||
-                                   command.equals("bal") || command.equals("tran"));
+                                   command.equals("bal") || command.equals("tran") ||
+                                   command.equals("allacc"));
     }
 }

@@ -2,6 +2,7 @@ package DBScripts;
 
 import DBObjects.InitPBData;
 import Interfaces.Debuggable;
+import Settings.GlobalSettings;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,13 +19,13 @@ public class SPVconf extends ConnectDB implements Debuggable {
     protected String catPath;
     protected String subcatPath;
     protected String currPath;
-    boolean isDebugMode = false;
+    boolean isDebugMode;
 
-    public SPVconf(boolean isDebugMode) {
+    public SPVconf() {
         this.catPath = "src/main/DB/cat.txt";
         this.subcatPath = "src/main/DB/subcat.txt";
         this.currPath = "src/main/DB/curr.txt";
-        this.isDebugMode = isDebugMode;
+        this.isDebugMode = GlobalSettings.isDebugMode;
     }
 
     public void WriteSPV(String pth, String newSPV, String inpMode) {

@@ -70,7 +70,7 @@ public class APIController { // TODO Implement Debuggable into APIController
         if (!ob.isValid()) {
             return "Invalid data Exception!";
         } else {
-            Add add = new Add(false);
+            Add add = new Add();
             try {
                 add.normal(ob);
                 return "Success!";
@@ -104,7 +104,7 @@ public class APIController { // TODO Implement Debuggable into APIController
         if (!ob.isValidTransfer()) {
             return "Invalid data Exception!";
         } else {
-            Add add = new Add(false);
+            Add add = new Add();
             try {
                 add.transfer(ob);
                 return "Success!";
@@ -182,7 +182,7 @@ public class APIController { // TODO Implement Debuggable into APIController
 
     @PostMapping("/conf/spv/initpb")
     public String postInitPB(@RequestBody InitPBData ob) {
-        SPVconf spv = new SPVconf(false);
+        SPVconf spv = new SPVconf();
         try {
             spv.InitPB(ob);
             return "Success!";

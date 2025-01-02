@@ -70,10 +70,10 @@ public class TransferPageController {
     }
 
     private void populateList(String mode) {
-        SPVconf spVconf = new SPVconf(false);
+        SPVconf spVconf = new SPVconf();
         switch (mode) {
             case "PB":
-                ResultData rd = Read.ReadDB(ReadCode.inits);
+                ResultData rd = Read.ReadDB(ReadCode.allacc);
                 List<Map<String, Object>> data = rd.getMap();
                 List<String> PB = new ArrayList<>();
                 for (Map<String, Object> userMap : data) {
@@ -133,8 +133,8 @@ public class TransferPageController {
 
         RecordData transaction = new RecordData(date, null, null, PBTo, PBFrom, sum, curr, comment);
 
-        if (!transaction.isValid()) {
-            TransferInfoLabel.setText("You have to select date, category, Person-bank, sum and currency!");
+        if (!transaction.isValidTransfer()) {
+            TransferInfoLabel.setText("You have to select date, Sender, Receiver, sum and currency!");
             TransferInfoLabel.setTextFill(Color.RED);
             TransferInfoLabel.setVisible(true);
         } else {

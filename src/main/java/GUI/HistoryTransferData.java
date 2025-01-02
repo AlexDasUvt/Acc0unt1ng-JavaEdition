@@ -23,11 +23,11 @@ public class HistoryTransferData {
         return comment;
     }
 
-    public String getPbTo() {
+    public String getReceiver() {
         return pbTo;
     }
 
-    public String getPbFrom() {
+    public String getSender() {
         return pbFrom;
     }
 

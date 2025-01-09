@@ -157,8 +157,7 @@ public class APIController { // TODO Implement Debuggable into APIController
     public ResultData postReadRaw(@RequestBody ReadCommand readCommand) {
         if (readCommand.isValid()) {
             ReadCode rc = getReadCode(readCommand.getCommand());
-            ResultData rs = Read.ReadDB(rc);
-            return rs;
+            return Read.ReadDB(rc);
         }
         System.out.println("Invalid code Exception!");
         return null;

@@ -79,9 +79,8 @@ public class HTTPSender implements Debuggable {
 
                     // Convert the response (JSON string) to ResultData object
                     ObjectMapper objectMapper = new ObjectMapper();
-                    ResultData resultData = objectMapper.readValue(response.toString(), ResultData.class);
 
-                    return resultData;
+                    return objectMapper.readValue(response.toString(), ResultData.class);
                 }
             } else {
                 System.out.println("Error: HTTP response code " + responseCode);

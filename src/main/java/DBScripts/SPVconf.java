@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SPVconf extends ConnectDB implements Debuggable {
@@ -102,15 +103,13 @@ public class SPVconf extends ConnectDB implements Debuggable {
         String normalText = ReadSPV(pth);
         List<String> result = new ArrayList<String>();
 
-        for (String line : normalText.split("\n")) {
-            result.add(line);
-        }
+        Collections.addAll(result, normalText.split("\n"));
         return result;
     }
 
     public String InitPB(InitPBData pbData) {
         Debug("Inside InitPB");
-        try (Connection conn = ConnectDB.connect(); Statement stmt = conn.createStatement()) {
+        try (Connection conn = ConnectDB.connect()) {
             PreparedStatement pstmt = conn.prepareStatement("""
                     INSERT INTO init_pb
                     VALUES(?, ?, ?)
@@ -121,7 +120,6 @@ public class SPVconf extends ConnectDB implements Debuggable {
 
             pstmt.executeUpdate();
             return "Success!";
-
         } catch (SQLException e) {
             return "Error: " + e.getMessage();
         }

@@ -11,8 +11,6 @@ import java.sql.Statement;
 import java.util.*;
 
 public class Read extends ConnectDB {
-    String query;
-
     public static ResultData ReadDB(ReadCode mode) {
         List<Map<String, Object>> list = new ArrayList<>();
         String query = switch (mode) {

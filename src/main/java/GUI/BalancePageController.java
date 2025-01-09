@@ -67,7 +67,7 @@ public class BalancePageController {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-        String json = toJSON("bal");
+        String json = toJSON();
         ResultData resultData;
         resultData = httpSender.ReadDBHTTP(json);
 
@@ -86,11 +86,11 @@ public class BalancePageController {
         }
     }
 
-    private String toJSON(String path) {
+    private String toJSON() {
         String key = "command";
 
         Map<String, String> map = new HashMap<>();
-        map.put(key, path);
+        map.put(key, "bal");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json;

@@ -26,7 +26,7 @@ public class TerminalUI implements Debuggable {
         this.isDebugMode = GlobalSettings.isDebugMode;
         spvconf = new SPVconf();
         add = new Add();
-        delete = new Delete(isDebugMode);
+        delete = new Delete();
     }
 
     public void run() {

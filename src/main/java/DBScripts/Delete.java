@@ -30,14 +30,14 @@ public class Delete extends ConnectDB implements Debuggable {
     public void DeletePB(String PB) {
         try (Connection conn = ConnectDB.connect(); Statement stmt = conn.createStatement()) {
             Debug("Inside DeletePB");
-            String query = "DELETE FROM init_pb WHERE person_bank = " + PB;
+            String query = "DELETE FROM init_pb WHERE person_bank = '" + PB + "'";
 
             stmt.executeUpdate(query);
-            Debug("Deleted PB from InitPB: " + PB);
-            query = "DELETE FROM main WHERE person_bank = " + PB;
+            Debug("Deleted PB from InitPB: '" + PB + "'");
+            query = "DELETE FROM main WHERE person_bank = '" + PB + "'";
             stmt.executeUpdate(query);
             Debug("Deleted PB from Main: " + PB);
-            query = "DELETE FROM transfer WHERE person_bank_from = " + PB + " OR person_bank_to = " + PB;
+            query = "DELETE FROM transfer WHERE person_bank_from = '" + PB + "' OR person_bank_to = '" + PB + "'";
             stmt.executeUpdate(query);
             Debug("Deleted PB from Transfer: " + PB);
         } catch (SQLException e) {

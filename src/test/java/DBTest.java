@@ -1,6 +1,5 @@
 import DBObjects.InitPBData;
 import DBScripts.*;
-import Enums.ReadCode;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -36,8 +35,8 @@ public class DBTest {
     }
 
     @Test
-    @DisplayName("Creating Person_bank")
-    public void CreatePerson() {
+    @DisplayName("Creating and Deleting Person_bank")
+    public void CreateDeletePerson() {
         SPVconf conf = new SPVconf();
         InitPBData init = new InitPBData("Test1", 16.16, "TEST");
         conf.InitPB(init);
@@ -51,22 +50,15 @@ public class DBTest {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
 
-    @Test
-    @DisplayName("Deleting Person_bank")
-    public void DeletePerson() {
         Delete del = new Delete();
         del.DeletePB("Test1");
         try (Connection conn = ConnectDB.connect(); Statement stmt = conn.createStatement()) {
-            String query = "SELECT person_bank FROM init_pb WHERE person_bank = 'Test1'";
-            ResultSet rs = stmt.executeQuery(query);
+            PreparedStatement pstmt = conn.prepareStatement("SELECT person_bank FROM init_pb WHERE person_bank = ?");
+            pstmt.setString(1, "Test1");
+            ResultSet rs = pstmt.executeQuery();
 
-            if (!rs.next()) {
-                Assert.assertEquals(1, 1);
-            } else {
-                Assert.assertEquals(1, -1);
-            }
+            Assert.assertFalse(rs.next());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

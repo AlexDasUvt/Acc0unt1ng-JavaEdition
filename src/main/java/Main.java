@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args) {
-                for (String arg : args) {
+        for (String arg : args) {
             switch (arg) {
                 case "-terminalUI":
                     GlobalSettings.EnableTerminalMode();

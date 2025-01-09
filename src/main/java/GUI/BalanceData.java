@@ -10,12 +10,15 @@ public class BalanceData {
         this.sum = sum;
         this.currency = currency;
     }
+
     public String getPb() {
         return pb;
     }
+
     public String getSum() {
         return sum;
     }
+
     public String getCurrency() {
         return currency;
     }
